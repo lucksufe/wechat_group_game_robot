@@ -57,6 +57,7 @@ class Quiz:
         return score_map
 
     def receive(self, answer, user):
+        print('{0} guess it is {1}'.format(user, answer))
         self.sub.answer(answer, user)
 
     def fetch_answer(self):
