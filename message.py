@@ -1,7 +1,8 @@
 import json
 import time
 
-PATH_DICTIONARY = {'test':'msg.json'}
+def welcome_msg(user):
+    return
 
 
 
