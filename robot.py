@@ -1,5 +1,7 @@
 from wxpy import *
 import requests
+import quiz
+import message
 
 USER_NAME = ''
 USER_NAME_SELF = '孙斐'
