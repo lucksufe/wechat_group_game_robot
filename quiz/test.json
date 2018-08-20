@@ -1,20 +1,51 @@
 [
   {
-    "hint":["三个字",""],
+    "hint":["三个字","三国演义"],
     "answer":"诸葛亮",
     "paragraphs":"借东风的人",
     "type":""
   },
   {
-    "hint":["三个字",""],
+    "hint":["三个字","红楼梦"],
     "answer":"林黛玉",
     "paragraphs":"葬花的人",
     "type":""
   },
   {
-    "hint":["五个字",""],
+    "hint":["五个字","西游记"],
     "answer":"如意金箍棒",
     "paragraphs":"孙悟空的武器",
     "type":""
+  },
+  {
+    "hint":["三个字","特别*"],
+    "answer":"特别帅",
+    "paragraphs":"你觉得作者怎么样",
+    "type":""
+  },
+  {
+    "hint":["两个字","孙斐"],
+    "answer":"孙斐",
+    "paragraphs":"我的名字叫什么",
+    "type":""
+  },
+  {
+    "hint":["三个字","*刀*"],
+    "answer":"磨刀石",
+    "paragraphs":"龙虾1000目 是什么厨房用具",
+    "type":""
+  },
+    {
+    "hint":["两个字","*酸"],
+    "answer":"碳酸",
+    "paragraphs":"H2CO3 是什么",
+    "type":""
+  },
+    {
+    "hint":["没有正确答案","随意回答"],
+    "answer":"",
+    "paragraphs":"评价一下作者",
+    "type":""
   }
+
 ]

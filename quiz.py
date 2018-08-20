@@ -7,19 +7,20 @@ PATH_DICTIONARY = {'test': 'quiz/test.json'}
 
 
 class Quiz:
-    def __init__(self, register, quiz_type="test", quiz_num=5):
+    def __init__(self, register, msg_sender, quiz_type="test", quiz_num=5):
         self.register = register
         self.quiz_type = quiz_type
         self.quiz_num = quiz_num
         self.should_continue = True
         self.data = {}
         self.sub = None
+        self.msg_sender = msg_sender
         self.quiz_indices = []
         self.champions = []
         self.load_json(PATH_DICTIONARY[self.quiz_type])
         self.generate_quiz_index()        
         self.loop_run()
-        logger.info(self.final_score())        
+        logger.info(self.final_score())
 
     def load_json(self, file):
         with open(file, "r", encoding='UTF-8') as quiz_file:
@@ -27,7 +28,8 @@ class Quiz:
             self.data = data
 
     def generate_quiz_index(self):
-        self.quiz_indices = [random.randint(0, len(self.data)-1) for _ in range(self.quiz_num)]
+        # self.quiz_indices = [random.randint(0, len(self.data)-1) for _ in range(self.quiz_num)]
+        self.quiz_indices = random.sample(range(0, len(self.data)), self.quiz_num)
 
     def loop_run(self):
         for i in range(self.quiz_num):            
@@ -47,6 +49,10 @@ class Quiz:
         self.quiz_num -= 1
         self.should_continue = True
         self.champions.append(user)
+        if user is None:
+            self.msg_sender.send('回答超时，遗憾！')
+        else:
+            self.msg_sender.send('回答正确，你真棒！')
 
     def final_score(self):
         if self.quiz_num > 0:
@@ -54,7 +60,7 @@ class Quiz:
         score_map = {}
         for c in self.champions:
             score_map[c] = score_map.get(c, 0) + 1
-        self.send(content=score_map)
+        self.msg_sender.send(score_map)
         return score_map
 
     def receive(self, answer, user):
@@ -66,7 +72,6 @@ class Quiz:
         self.receive(ans, user)
 
 
-
 class SubQ:
     def __init__(self, content, quiz, life_time=60):
         self.born_time = time.time()
@@ -74,7 +79,7 @@ class SubQ:
         self.data = content
         self.life_time = life_time
         self.quiz = quiz
-        self.quiz.send(content="问题：{0}".format(self.data["paragraphs"])) 
+        self.quiz.msg_sender.send(content="问题: {0}".format(self.data["paragraphs"]))
         logger.info(content)
 
     def answer(self, text, user):
@@ -82,16 +87,15 @@ class SubQ:
             self.correct(user)
         elif time.time()-self.born_time > self.life_time:
             self.correct(None)
-        elif time.time()-self.born_time > 5:
+        elif time.time()-self.born_time > 5 * self.hint_idx + 10:
             self.give_hint()        
         # elif self.life_time - (time.time()-self.born_time) <30:
         #     self.count_down()
-        
 
     def give_hint(self):
         if self.hint_idx >= len(self.data["hint"]):
             return
-        self.quiz.send(content="提示{0}".format(self.data["hint"][self.hint_idx]))        
+        self.quiz.msg_sender.send(content="提示: {0}".format(self.data["hint"][self.hint_idx]))
         logger.info(self.data["hint"][self.hint_idx])
         self.hint_idx += 1
 
@@ -100,6 +104,3 @@ class SubQ:
 
     def count_down(self):
         pass
-    
-def msg_wrap(self, *args, **kwargs):
-    return 
