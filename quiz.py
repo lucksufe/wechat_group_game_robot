@@ -1,7 +1,7 @@
 import json
 import time
 import random
-from fake_robot import *
+from log import logger
 
 PATH_DICTIONARY = {'test': 'quiz/test.json'}
 
@@ -19,7 +19,7 @@ class Quiz:
         self.load_json(PATH_DICTIONARY[self.quiz_type])
         self.generate_quiz_index()        
         self.loop_run()
-        print(self.final_score())
+        logger.info(self.final_score())        
 
     def load_json(self, file):
         with open(file, "r", encoding='UTF-8') as quiz_file:
@@ -54,10 +54,11 @@ class Quiz:
         score_map = {}
         for c in self.champions:
             score_map[c] = score_map.get(c, 0) + 1
+        self.send(content=score_map)
         return score_map
 
     def receive(self, answer, user):
-        print('{0} guess it is {1}'.format(user, answer))
+        logger.info('{0} guess it is {1}'.format(user, answer))
         self.sub.answer(answer, user)
 
     def fetch_answer(self):
@@ -65,29 +66,40 @@ class Quiz:
         self.receive(ans, user)
 
 
+
 class SubQ:
     def __init__(self, content, quiz, life_time=60):
+        self.born_time = time.time()
+        self.hint_idx = 0
         self.data = content
         self.life_time = life_time
         self.quiz = quiz
-        print(content)
+        self.quiz.send(content="问题：{0}".format(self.data["paragraphs"])) 
+        logger.info(content)
 
     def answer(self, text, user):
         if text == self.data["answer"]:
             self.correct(user)
+        elif time.time()-self.born_time > self.life_time:
+            self.correct(None)
+        elif time.time()-self.born_time > 5:
+            self.give_hint()        
+        # elif self.life_time - (time.time()-self.born_time) <30:
+        #     self.count_down()
+        
 
     def give_hint(self):
-        print(self.data["hint"][0])
+        if self.hint_idx >= len(self.data["hint"]):
+            return
+        self.quiz.send(content="提示{0}".format(self.data["hint"][self.hint_idx]))        
+        logger.info(self.data["hint"][self.hint_idx])
+        self.hint_idx += 1
 
     def correct(self, user):
         self.quiz.finish_sub_q(user)
 
-
-fake = FakeRobot()
-q = Quiz(fake)
-# while q.final_score():
-#     print('---')
-#     time.sleep(3)
-
-# print(q.final_score())
-
+    def count_down(self):
+        pass
+    
+def msg_wrap(self, *args, **kwargs):
+    return 
