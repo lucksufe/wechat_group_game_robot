@@ -21,6 +21,7 @@ class Quiz:
         self.generate_quiz_index()        
         self.loop_run()
         logger.info(self.final_score())
+        self.register.end_activity(self.msg_sender.puid)
 
     def load_json(self, file):
         with open(file, "r", encoding='UTF-8') as quiz_file:
@@ -68,7 +69,7 @@ class Quiz:
         self.sub.answer(answer, user)
 
     def fetch_answer(self):
-        ans, user = self.register.spawn()
+        ans, user = self.register.spawn(self.msg_sender.puid)
         self.receive(ans, user)
 
 

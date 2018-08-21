@@ -6,6 +6,7 @@ USER_NAME = ''
 USER_NAME_SELF = '孙斐'
 MSG_OUTPUT = []
 bot = Bot()
+bot.enable_puid()
 fake_bot = FakeRobot()
 # my_group = bot.groups().search('交流群')[0]
 # my_friend = bot.friends().search('')[0]
@@ -41,18 +42,20 @@ def message_self(msg):
     # print(msg.sender.user_name, msg.sender.wxid)
     # if USER_NAME_SELF in msg.sender.name:
     #     print('self')
-    # if "show" in msg.text:
-    #     return fake_bot.storge
+    if "功能展示" == msg.text:
+        return ""
     # if "@" in msg.text:
     #     tuling.do_reply(msg)
-    if "我要答题" == msg.text:
-        msg.sender.send("开始答题")
+    elif "我要答题" == msg.text:
         quiz_start(msg.sender)
 
 
 def quiz_start(msg_sender):
-    fake_bot.reset()
-    quiz.Quiz(fake_bot, msg_sender)
+    if fake_bot.register_activity(msg_sender.puid,'quiz'):
+        msg_sender.send("开始答题")
+        quiz.Quiz(fake_bot, msg_sender)
+    else:
+        msg_sender.send("当前有其他活动进行中")
 
 
 bot.join()
