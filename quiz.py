@@ -3,11 +3,12 @@ import time
 import random
 from log import logger
 
-PATH_DICTIONARY = {'test': 'quiz/test.json'}
+PATH_DICTIONARY = {'test': 'quiz/test.json',
+                   'one_way': 'quiz/one_way.json'}
 
 
 class Quiz:
-    def __init__(self, register, msg_sender, quiz_type="test", quiz_num=5):
+    def __init__(self, register, msg_sender, quiz_type="one_way", quiz_num=5):
         self.register = register
         self.quiz_type = quiz_type
         self.quiz_num = quiz_num
@@ -61,7 +62,7 @@ class Quiz:
         score_map = {}
         for c in self.champions:
             score_map[c] = score_map.get(c, 0) + 1
-        self.msg_sender.send(score_map)
+        self.msg_sender.send(generate_score(score_map))
         return score_map
 
     def receive(self, answer, user):
@@ -105,3 +106,47 @@ class SubQ:
 
     def count_down(self):
         pass
+
+
+def generate_quiz(file):
+    quiz = []
+    with open(file, 'r') as source:
+        lines = source.readlines()
+        for line in lines:
+            remove_rank = line.split('.')
+            if len(remove_rank)>1:
+                q = line.strip('\n').replace(remove_rank[0]+'.','')
+                q = q.split('?')
+                if not q[1] == '驯鹿':
+                    quiz.append(q)
+    return quiz
+
+
+def mk_quiz(content, file , tp='word'):
+    json_arr = []
+    for c in content:
+        tmp = { 
+                "hint":[],
+                "answer":"",
+                "paragraphs":"",
+                "type":""
+              }
+        tmp["hint"].append('{0}个字'.format(len(c[1])))
+        tmp["answer"] = c[1]
+        tmp["paragraphs"] = c[0]+'?'
+        tmp["type"] = tp
+        json_arr.append(tmp)
+    f = open(file,'w')
+    f.write(json.dumps(json_arr,ensure_ascii=False)) 
+    f.close()
+
+    
+def generate_score(score_map):
+    output = ''
+    for (k,v) in score_map.items():
+        if k is not None:
+            output += '{0}答对了{1}题！恭喜！！คิดถึง'.format(k,v)
+    return output
+# mk_quiz(generate_quiz('quiz/1'), 'quiz/one_way.json')
+
+

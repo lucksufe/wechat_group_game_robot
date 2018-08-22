@@ -18,12 +18,6 @@
     "type":""
   },
   {
-    "hint":["三个字","特别*"],
-    "answer":"特别帅",
-    "paragraphs":"你觉得作者怎么样",
-    "type":""
-  },
-  {
     "hint":["两个字","孙斐"],
     "answer":"孙斐",
     "paragraphs":"我的名字叫什么",
@@ -40,12 +34,5 @@
     "answer":"碳酸",
     "paragraphs":"H2CO3 是什么",
     "type":""
-  },
-    {
-    "hint":["没有正确答案","随意回答"],
-    "answer":"",
-    "paragraphs":"评价一下作者",
-    "type":""
   }
-
 ]
