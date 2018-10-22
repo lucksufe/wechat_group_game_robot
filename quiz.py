@@ -1,8 +1,11 @@
+# coding=utf-8
 import json
 import time
 import random
 from log import logger
-
+# import sys
+# reload(sys)
+# sys.setdefualtencoding('utf8')
 PATH_DICTIONARY = {'test': 'quiz/test.json',
                    'one_way': 'quiz/one_way.json'}
 

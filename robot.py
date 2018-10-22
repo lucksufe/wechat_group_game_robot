@@ -1,6 +1,10 @@
+# coding=utf-8
 from wxpy import *
 from fake_robot import *
 import quiz
+# import sys
+# reload(sys)
+# sys.setdefualtencoding('utf8')
 
 USER_NAME = ''
 USER_NAME_SELF = '孙斐'
