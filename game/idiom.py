@@ -32,12 +32,12 @@ def find_pinyin(idiom_hint, is_first):
 def next_idiom(idiom_dictionary, idiom_word):
     for idiom_single in idiom_dictionary:
         if idiom_single['word'][:1] == find_key(idiom_word) and not_in_answer(idiom_single):
-            print(idiom_single['word'])
+            # print(idiom_single['word'])
             # print(idiom_single)
             return idiom_single
     for idiom_single in idiom_dictionary:
         if find_pinyin(idiom_single, True) == find_pinyin(idiom_word, False) and not_in_answer(idiom_single):
-            print(idiom_single['word'])
+            # print(idiom_single['word'])
             # print(idiom_single)
             return idiom_single
 
@@ -52,15 +52,16 @@ def loop(idiom_dictionary, idiom_word, num=10):
         idiom_word = next_idiom(idiom_dictionary, idiom_word)
         ANSWER.append(idiom_word)
         num -= 1
-        print(num)
+        # print(num)
 
 
 def start(idiom_word):
     with open('idiom.json', 'rb') as idiom_file:
         idiom_content = json.load(idiom_file)
-        loop(idiom_content, idiom_word, 10000)
-        print(len(ANSWER))
-        print(RESERVED)
+        loop(idiom_content, idiom_word, 10)
+        # print(len(ANSWER))
+        # print(RESERVED)
+    return ANSWER
 
 
 if __name__ == '__main__':
